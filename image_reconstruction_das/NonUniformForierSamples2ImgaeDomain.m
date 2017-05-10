@@ -6,7 +6,7 @@ function imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_me
 %       4 - Interpolate the signal in baseband. IFFT.
 %       5 - Using direct iDFT. Accurate transform. (Time issue)
 %       6 - Using NUFFT (Jeff Fessler).
-tic
+
 switch processType
     case 3
         imageRecover = single(InterpFullFreq(Gamma, scan, fx , fz_mesh, fx_mesh));
@@ -47,6 +47,6 @@ switch processType
         imageRecover = OutputImages(:,:,end);
 %         profile viewer;
 end
-toc
+
 
 end

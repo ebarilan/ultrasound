@@ -24,11 +24,11 @@ S = fftshift( fft(S_f_x.*expPhase,[],2) , 2);
 S = single(S);
 
 if theta <= 0
-    unwrapLine = fsx/2 + fx0;
-    indWrap = (fx_mesh > unwrapLine);
+    unwrapLine = fx(end) + fx0;
+    indWrap = (fx_mesh >= unwrapLine);
     fx_mesh(indWrap) = fx_mesh(indWrap) - fsx;
 else
-    unwrapLine = -fsx/2 + fx0;
+    unwrapLine = fx(1) + fx0;
     indWrap = (fx_mesh < unwrapLine);
     fx_mesh(indWrap) = fx_mesh(indWrap) + fsx;
 end

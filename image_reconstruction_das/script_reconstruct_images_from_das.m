@@ -98,9 +98,9 @@ scan.read_file(path_scan);
 
 %-- Indices of plane waves to be used for each reconstruction
 % pw_indices{1} = 38; %38%%%%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-pw_indices{1} = round(linspace(1,dataset.firings,3));
-% pw_indices{3} = round(linspace(1,dataset.firings,11));
-% pw_indices{4} = round(1:dataset.firings);               %-- dataset.firings corresponding to the total number of emitted steered plane waves
+% pw_indices{1} = round(linspace(1,dataset.firings,3));
+% pw_indices{1} = round(linspace(1,dataset.firings,11));
+pw_indices{1} = round(1:dataset.firings);               %-- dataset.firings corresponding to the total number of emitted steered plane waves
 
 sumForierDomainFlag = 1;
 
@@ -130,11 +130,11 @@ savefig(fig,strcat(path_reconstruted_img_fig,datestr(now,'dd-mm-yy_HH-MM'),'.fig
 saveas(fig,path_reconstruted_img_fig,'jpeg');
 image.write_file(path_reconstruted_img);
 
-
+if(0)
 part = 0.55;
 indNumPart = ceil(size(scan.z_matrix,1)*part);
 [~,fig] = image.showPart(dynamic_range,[],indNumPart);
 %-- Save results
 savefig(fig,strcat(path_reconstruted_img_fig,datestr(now,'dd-mm-yy_HH-MM'),'_Part.fig'));
 saveas(fig,strcat(path_reconstruted_img_fig,'_Part'),'jpeg');
-
+end
