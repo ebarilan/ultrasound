@@ -97,11 +97,12 @@ scan.read_file(path_scan);
 
 
 %-- Indices of plane waves to be used for each reconstruction
-pw_indices{1} = 1; %38%%%%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-% pw_indices{2} = round(linspace(1,dataset.firings,3));
+% pw_indices{1} = 38; %38%%%%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+pw_indices{1} = round(linspace(1,dataset.firings,3));
 % pw_indices{3} = round(linspace(1,dataset.firings,11));
 % pw_indices{4} = round(1:dataset.firings);               %-- dataset.firings corresponding to the total number of emitted steered plane waves
 
+sumForierDomainFlag = 1;
 
 %-- Reconstruct Bmode images for each pw_indices
 disp(['Starting image reconstruction from ',acquisition,' for ',phantom,' using ',data,' dataset'])
@@ -111,7 +112,7 @@ switch data_type
     case 2
         image = das_rf(scan,dataset,pw_indices);
     case {3,4,5,6,7}
-        image = IQInterpFFT(scan,dataset,pw_indices, data_type);
+        image = IQInterpFFT(scan,dataset,pw_indices, data_type, sumForierDomainFlag);
     case 8 
         image = IQInterpFFT2(scan,dataset,pw_indices, data_type);
     otherwise       %-- Do deal with bad values
