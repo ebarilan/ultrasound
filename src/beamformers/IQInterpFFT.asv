@@ -93,8 +93,12 @@ end
 %2.1 fz Calculation
 
 tmp1 = fx_mesh - f_mesh * sin(theta) / dataset.c0;
-tmp2 = ((f_mesh / dataset.c0).^2 - tmp1.^2).^0.5;
-fz_mesh = f_mesh * cos(theta) / dataset.c0 + tmp2;
+fz_mesh = (f_mesh / dataset.c0).^
+
+tmp2 = bsxfun(@minus, 1./(lambda.^2), tmp1.^2);
+
+fz_mesh = bsxfun(@plus, cos(theta)./lambda, tmp2.^0.5);
+
 
 fxminusfx0 = bsxfun(@minus, fx_mesh ,fx0);
 tmpNom = ( (f_mesh / dataset.c0).^2  -  fxminusfx0.^2 ).^0.5;
@@ -128,10 +132,21 @@ end
 
 if(1)
 figure
+subplot(1,2,1)
 mesh(fx_mesh, fz_mesh, abs(Gamma));
 title('\Gamma(f_z,f_x) Reg','fontsize',24)
 xlabel('f_x','fontsize',18)
 ylabel('f_z','fontsize',18)
+if(0)
+subplot(1,2,2)
+mesh(x_plus_x0, fz, abs(Gamma2));
+title('\Gamma(f_z,f_x) New','fontsize',24)
+xlabel('f_x','fontsize',18)
+ylabel('f_z','fontsize',18)
+%         Gamma = Gamma2; %%%%%!!!!!!!!!!!!!!!!!!!!!!!
+
+end
+
 end
 
 
@@ -151,8 +166,8 @@ switch processType
     case 5
         imageRecover = NUDFT(Gamma, scan, fz_mesh, fx_mesh , fsx);
     case 6
-        [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
-        imageRecover = single(InterpNUFFT(Gamma, scan, fz_mesh, fx_mesh , fsx,Kappa_m,sqrtN));
+%         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz, x , fx, fsx);
+        imageRecover = single(InterpNUFFT(Gamma, scan, fz_mesh, fx_mesh , fsx,0,0));
 %     case 7
 %         imageRecover = InterpFreqBB(Gamma, scan, fx , fz, x);
 %     case 8
