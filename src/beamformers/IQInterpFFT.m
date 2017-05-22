@@ -13,7 +13,7 @@ if sumForierDomainFlag
     end
     fx_mesh = cat(1,fx_mesh_ceil{:}); fz_mesh = cat(1,fz_mesh_ceil{:}); Gamma =cat(1,Gamma_ceil{:});
     
-    imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType);
+    imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, sumForierDomainFlag);
 
     
 else
@@ -23,7 +23,7 @@ else
         
         [fx_mesh, fz_mesh, Gamma, fx, fsx] = Sampels2FourierDomain(dataset,probeIdx);
         
-        imageRecoverI{i} = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType);
+        imageRecoverI{i} = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, sumForierDomainFlag);
         
     end
     imageRecoverI = cat(3,imageRecoverI{:});

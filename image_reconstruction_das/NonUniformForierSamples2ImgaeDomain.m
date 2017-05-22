@@ -1,4 +1,4 @@
-function imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType)
+function imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, sumForierDomainFlag)
 
 %% 3. Transform back to image.
 %cases:
@@ -11,7 +11,7 @@ switch processType
     case 3
         imageRecover = single(InterpFullFreq(Gamma, scan, fx , fz_mesh, fx_mesh));
     case 4
-        imageRecover = InterpFreqBB(Gamma, scan, fx , fz_mesh, fx_mesh);
+        imageRecover = InterpFreqBB(Gamma, scan, fx , fz_mesh, fx_mesh, sumForierDomainFlag);
     case 5
         imageRecover = NUDFT(Gamma, scan, fz_mesh, fx_mesh , fsx);
     case 6
