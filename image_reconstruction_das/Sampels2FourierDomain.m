@@ -25,11 +25,13 @@ S = single(S);
 
 if theta <= 0
     unwrapLine = fsx/2 + fx0;
-    indWrap = (fx_mesh > unwrapLine);
+    unwrap_mat = repmat(unwrapLine,1,size(fx_mesh,2));
+    indWrap = (fx_mesh > unwrap_mat);
     fx_mesh(indWrap) = fx_mesh(indWrap) - fsx;
 else
     unwrapLine = -fsx/2 + fx0;
-    indWrap = (fx_mesh < unwrapLine);
+    unwrap_mat = repmat(unwrapLine,1,size(fx_mesh,2));
+    indWrap = (fx_mesh < unwrap_mat);
     fx_mesh(indWrap) = fx_mesh(indWrap) + fsx;
 end
 
@@ -56,6 +58,9 @@ if(0)
     hold off;
 end
 
+
+
+
 %% 2. Transform from [f,fx] -> [fz,fx]
 
 %2.1 fz Calculation
@@ -72,10 +77,12 @@ Gamma = S .* constS;
 
 if(0)
     figure
-    mesh(fx_mesh, fz_mesh, abs(Gamma));
-    title('\Gamma(f_z,f_x) Reg','fontsize',24)
+    scatter3(fx_mesh(:), fz_mesh(:), ones(size((Gamma(:)))),'filled')
+    title(sprintf('Frequency Map\n Angle %.2f',theta),'fontsize',24)
     xlabel('f_x','fontsize',18)
     ylabel('f_z','fontsize',18)
+    view([0,90])
+    
 end
 
 end

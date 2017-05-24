@@ -20,12 +20,13 @@ else
     imageRecoverI = cell(nAngles, 1);
     for i = 1:nAngles
         probeIdx = probeIdxTot(i);
-        
         [fx_mesh, fz_mesh, Gamma, fx, fsx] = Sampels2FourierDomain(dataset,probeIdx);
-        
-        imageRecoverI{i} = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, sumForierDomainFlag);
-        
+        imageRecoverI{i} = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, sumForierDomainFlag); 
     end
+    if(0) % Print Plot Result Of Every Angle 
+        PlotImageEveryAngle(imageRecoverI, probeIdxTot,scan); 
+    end
+    
     imageRecoverI = cat(3,imageRecoverI{:});
     imageRecover = mean(imageRecoverI, 3);
 end
@@ -69,5 +70,18 @@ image.transmit_f_number = 0;
 image.transmit_apodization_window = 'none';
 image.receive_apodization_window = 'Tukey 25%';
 
+titleName = [];
+
+if sumForierDomainFlag
+    titleName = 'Embedded. ';
+end
+   
+switch processType
+    case 4
+        titleName = [titleName,'Linear Interpolation'];
+    case 6
+        titleName = [titleName,'NUFFT'];
+end
+image.name = titleName;
 
 end

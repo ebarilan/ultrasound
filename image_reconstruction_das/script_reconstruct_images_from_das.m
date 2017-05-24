@@ -1,4 +1,4 @@
-function script_reconstruct_images_from_das(acquisition_type , phantom_type , data_type)
+function script_reconstruct_images_from_das(acquisition_type , phantom_type , data_type, IsEmbedded, numAngels)
 %-- Script to be used as an example to manipulate the provided dataset
 
 %-- After choosing the specific configuration through acquisition_type, 
@@ -26,6 +26,12 @@ function script_reconstruct_images_from_das(acquisition_type , phantom_type , da
 home; % clc;
 addpath(genpath('../src'));
 
+if nargin == 3
+    numAngels = 1;
+    IsEmbedded = 1;
+elseif nargin == 4
+    numAngels = 1;
+end
 
 %-- Parameters
 % acquisition_type = 1;       %-- 1 = simulation || 2 = experiments
@@ -86,7 +92,7 @@ end
 %-- Create path to load corresponding files
 path_dataset = ['../../database/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_dataset_',data,'.hdf5'];
 path_scan = ['../../database/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_scan.hdf5'];
-path_reconstruted_img = ['../../reconstructed_image/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_img_from_',dataSave,'.hdf5'];
+path_reconstruted_img = ['../../reconstructed_image/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_img_from_',dataSave,'numOfAngles',num2str(numAngels),'Is_embedad',num2str(IsEmbedded),'.hdf5'];
 path_reconstruted_img_fig = ['../../reconstructed_image/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_img_from_',dataSave];
 
 %-- Read the corresponding dataset and the region where to reconstruct the image
@@ -97,12 +103,15 @@ scan.read_file(path_scan);
 
 
 %-- Indices of plane waves to be used for each reconstruction
-% pw_indices{1} = 38; %38%%%%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-% pw_indices{1} = round(linspace(1,dataset.firings,3));
+if numAngels == 1
+    pw_indices{1} = 38;
+else
+    pw_indices{1} = round(linspace(1,dataset.firings,numAngels));
+end
 % pw_indices{1} = round(linspace(1,dataset.firings,11));
-pw_indices{1} = round(1:dataset.firings);               %-- dataset.firings corresponding to the total number of emitted steered plane waves
+% pw_indices{1} = round(1:dataset.firings);               %-- dataset.firings corresponding to the total number of emitted steered plane waves
 
-IsEmbedded = 1;
+% IsEmbedded = 1;
 
 %-- Reconstruct Bmode images for each pw_indices
 disp(['Starting image reconstruction from ',acquisition,' for ',phantom,' using ',data,' dataset'])
