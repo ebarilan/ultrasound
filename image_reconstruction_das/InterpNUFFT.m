@@ -7,7 +7,7 @@ delta = (1/scan.dz ) / Nz;
 minInd = floor(min(fz(:))/delta);
 maxInd = ceil(max(fz(:))/delta);
 minFz = minInd*delta;
-maxFz = maxInd*delta;
+maxFz = maxInd*delta; %fot github
 fzWanted = (minFz: delta :maxFz)';
 
 zTmp = fz(:) - minFz;
