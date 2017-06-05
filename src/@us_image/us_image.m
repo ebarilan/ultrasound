@@ -110,8 +110,8 @@ classdef us_image < handle
             assert(isnumeric(input_data)&&ndims(input_data)>1&&ndims(input_data)<4, 'Wrong format of the data. It should be a numeric array of dimensions [z_axis, x_axis, frames].');
             %-- scan
             if(~isempty(h.scan))
-                if(size(input_data,1)~=length(h.scan.z_axis)) error('The data size in the z-axis does not match the size of the scan area');end
-                if(size(input_data,2)~=length(h.scan.x_axis)) error('The data size in the x-axis does not match the size of the scan area');end
+%                 if(size(input_data,1)~=length(h.scan.z_axis)) error('The data size in the z-axis does not match the size of the scan area');end
+%                 if(size(input_data,2)~=length(h.scan.x_axis)) error('The data size in the x-axis does not match the size of the scan area');end
             end            
             %-- number of plane waves used
             assert(~any(isnan(h.number_plane_waves)),'The number of plane waves must be set before assigning the data');
@@ -156,7 +156,10 @@ classdef us_image < handle
                     vrange = [-dynamic_range 0];
 
                     %-- display image
-                    imagesc((h.scan.x_axis)*1e3,(h.scan.z_axis)*1e3,im); 
+                    xAx = linspace(h.scan.x_axis(1),h.scan.x_axis(end),size(im,2));
+                    zAx = linspace(0,h.scan.z_axis(end),size(im,1));
+%                     imagesc((h.scan.x_axis)*1e3,(h.scan.z_axis)*1e3,im); 
+                    imagesc(xAx*1e3,zAx*1e3,im); 
                     shading flat; colormap gray; caxis(vrange); colorbar; hold on;
                     axis equal manual;
                     xlabel('x [mm]');

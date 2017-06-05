@@ -40,31 +40,34 @@ else
 end
 
 %% 4. Image Interpolation
-zAxesFinal = single((0:size(imageRecover,1)-1)/(size(imageRecover,1)-1)*scan.z_axis(end));
-% dxCalc = 1 /(2*(fx(end) - fx(1)));
-% if processType==7
+if(0)
+    zAxesFinal = single((0:size(imageRecover,1)-1)/(size(imageRecover,1)-1)*scan.z_axis(end));
+    % dxCalc = 1 /(2*(fx(end) - fx(1)));
+    % if processType==7
     xAxesFinal = ((0:size(imageRecover,2)-1) - size(imageRecover,2)/2)/size(imageRecover,2)*2*scan.x_axis(end);
-% else
-%     xAxesFinal = ((0:size(imageRecover,2)-1) - size(imageRecover,2)/2) *dxCalc;
-% end
-
-% figure
-% imagesc(xAxesFinal , zAxesFinal , db(imageRecover/max(imageRecover(:))))
-% title('Final Image Interp1','fontsize',24)
-% xlabel('X','fontsize',18)
-% ylabel('Z','fontsize',18)
-
-%-- interpolate the requested grid
-[xAxesFinalMesh,zAxesFinalMesh] = meshgrid(single(xAxesFinal),single(zAxesFinal));
-[x_axisMesh , z_axisMesh] = meshgrid(scan.x_axis , scan.z_axis);
-
-resampled_envelope_beamformed_data = zeros(numel(scan.z_axis),numel(scan.x_axis),numel(pw_indices));
-for f=1:length(pw_indices)
-    resampled_envelope_beamformed_data(:,:,f) = interp2(xAxesFinalMesh,zAxesFinalMesh, imageRecover(:,:,f),x_axisMesh , z_axisMesh);
+    % else
+    %     xAxesFinal = ((0:size(imageRecover,2)-1) - size(imageRecover,2)/2) *dxCalc;
+    % end
+    
+    % figure
+    % imagesc(xAxesFinal , zAxesFinal , db(imageRecover/max(imageRecover(:))))
+    % title('Final Image Interp1','fontsize',24)
+    % xlabel('X','fontsize',18)
+    % ylabel('Z','fontsize',18)
+    
+    %-- interpolate the requested grid
+    [xAxesFinalMesh,zAxesFinalMesh] = meshgrid(single(xAxesFinal),single(zAxesFinal));
+    [x_axisMesh , z_axisMesh] = meshgrid(scan.x_axis , scan.z_axis);
+    
+    resampled_envelope_beamformed_data = zeros(numel(scan.z_axis),numel(scan.x_axis),numel(pw_indices));
+    for f=1:length(pw_indices)
+        resampled_envelope_beamformed_data(:,:,f) = interp2(xAxesFinalMesh,zAxesFinalMesh, imageRecover(:,:,f),x_axisMesh , z_axisMesh);
+    end
+    
+    % No_resampled_envelope_beamformed_data = imageRecover(((size(imageRecover,1)-scan.Nz+1):end),:);
+else
+    resampled_envelope_beamformed_data = imageRecover; %%%%!!!!!
 end
-
-% No_resampled_envelope_beamformed_data = imageRecover(((size(imageRecover,1)-scan.Nz+1):end),:);
-
 %-- declare an us_image object to store the beamformed data
 image = us_image('DAS-RF beamforming');
 image.author = 'Alfonso Rodriguez-Molares <alfonso.r.molares@ntnu.no>';
