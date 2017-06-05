@@ -57,6 +57,9 @@ switch processType
 %         [ OutputImages_imag  , b_hat] = SPURS(double(imag(b)), double(Kappa_m), SPURS_settings);
         imageRecover = OutputImages(:,:,end);
 %         profile viewer;
+    case 8
+%         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
+        imageRecover = single(InterpNUFFT2(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
 end
 
 

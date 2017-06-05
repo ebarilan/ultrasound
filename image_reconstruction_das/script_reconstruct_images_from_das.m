@@ -132,7 +132,7 @@ switch data_type
         image = das_iq(scan,dataset,pw_indices);
     case 2
         image = das_rf(scan,dataset,pw_indices);
-    case {3,4,5,6,7}
+    case {3,4,5,6,7,8}
         image = IQInterpFFT(scan,dataset,pw_indices, data_type, IsEmbedded, spursConfig);
     otherwise       %-- Do deal with bad values
         image = das_iq(scan,dataset,pw_indices);       

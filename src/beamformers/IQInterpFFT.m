@@ -94,6 +94,8 @@ switch processType
         titleName = [titleName,'NUFFT'];
     case 7
         titleName = [titleName,'SPURS'];
+    case 8
+        titleName = [titleName,'NUFFT 1D'];
 end
 image.name = titleName;
 
