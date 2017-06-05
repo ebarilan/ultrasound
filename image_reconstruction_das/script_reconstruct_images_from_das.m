@@ -29,10 +29,8 @@ addpath(genpath('../src'));
 if nargin == 3
     numAngels = 1;
     IsEmbedded = 1;
-%     spursConfig = 0;
 elseif nargin == 4
     numAngels = 1;
-%     spursConfig = 0;
 end
 
 %-- Parameters
@@ -71,6 +69,8 @@ switch data_type
         data = 'iq';        
 end
 
+strSpurs = '';
+
 switch data_type
     case 1
         dataSave = 'iq';
@@ -92,6 +92,10 @@ switch data_type
         setenv('SPURS_DIR', '../../../SPURS_DEMO');
         SPURS_work_dir = getenv('SPURS_DIR');
         addpath(genpath(SPURS_work_dir));
+        
+        strSpurs = strcat('Sd',num2str(spursConfig.KernelFunctionDegree),...
+                          'Si',num2str(spursConfig.Niterations),...
+                          'So',num2str(spursConfig.OverGridFactor));
     otherwise       %-- Do deal with bad values
         dataSave = 'iq';        
 end
@@ -141,7 +145,7 @@ disp(['Result saved in "',path_reconstruted_img,'"'])
 dynamic_range = 60;
 [~,fig] = image.show(dynamic_range);
 %-- Save results
-savefig(fig,strcat(path_reconstruted_img_fig,'a',num2str(acquisition_type),'p', num2str(phantom_type),'t',num2str(data_type),'e',num2str(IsEmbedded),'a', num2str(numAngels),'_',datestr(now,'dd-mm-yy_HH-MM'),'.fig'));
+savefig(fig,strcat(path_reconstruted_img_fig,'a',num2str(acquisition_type),'p', num2str(phantom_type),'t',num2str(data_type),'e',num2str(IsEmbedded),'a', num2str(numAngels),strSpurs,'_',datestr(now,'dd-mm-yy_HH-MM'),'.fig'));
 saveas(fig,path_reconstruted_img_fig,'jpeg');
 image.write_file(path_reconstruted_img);
 

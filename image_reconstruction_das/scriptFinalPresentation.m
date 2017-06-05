@@ -4,7 +4,7 @@ numAngels = 1;
 IsEmbedded = 1;
 acquisition_type = 1;
 
-spursConfig.KernelFunctionDegree = 3;
+spursConfig.KernelFunctionDegree = 5;
 spursConfig.Rho = 1e-3;
 spursConfig.Niterations = 1;
 spursConfig.OverGridFactor = 1;%2;
