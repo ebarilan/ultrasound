@@ -6,7 +6,7 @@ delta = (1/scan.dz ) / Nz;
 if sumForierDomainFlag
     minInd = floor(min(fz(:))/delta);
     maxInd = ceil(max(fz(:))/delta);
-else 
+else
     minIndGlobal = 92;
     maxIndGlobal = 507;
     minInd = minIndGlobal;
@@ -33,12 +33,12 @@ for i = 1:numel(C)
     idxSlice = (ic == i);
     omZ_Slice = omZ(idxSlice);
     om = double(omZ_Slice);
-Nd = double(single(sqrtN));  
-Jd = double(3);
-Kd = double(2*Nd);
-st = nufft_init( om , Nd , Jd , Kd);
-xd = nufft_adj(sRes(idxSlice), st);
-imageFFT(:,i) = fftshift(fft(xd));
+    Nd = double(single(sqrtN));
+    Jd = double(3);
+    Kd = double(2*Nd);
+    st = nufft_init( om , Nd , Jd , Kd);
+    xd = nufft_adj(sRes(idxSlice), st);
+    imageFFT(:,i) = fftshift(fft(xd));
 end
 
 image = abs(ifft2(ifftshift(imageFFT)));

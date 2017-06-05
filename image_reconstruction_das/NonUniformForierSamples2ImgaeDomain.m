@@ -60,6 +60,8 @@ switch processType
     case 8
 %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
         imageRecover = single(InterpNUFFT2(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
+    case 9
+        imageRecover = single(InterpLinearSlice(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
 end
 
 
