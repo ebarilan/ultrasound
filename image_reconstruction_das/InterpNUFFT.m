@@ -1,10 +1,18 @@
-function image = InterpNUFFT(sRes, scan, fz, x , fsx)
+function image = InterpNUFFT(sRes, scan, fz, x , fsx, sumForierDomainFlag)
 
 
 Nz = ceil(scan.z_axis(end)/scan.dz);
 delta = (1/scan.dz ) / Nz;
-minInd = floor(min(fz(:))/delta);
-maxInd = ceil(max(fz(:))/delta);
+if sumForierDomainFlag
+    minInd = floor(min(fz(:))/delta);
+    maxInd = ceil(max(fz(:))/delta);
+else 
+    minIndGlobal = 92;
+    maxIndGlobal = 507;
+    minInd = minIndGlobal;
+    maxInd = maxIndGlobal;
+end
+
 minFz = minInd*delta;
 maxFz = maxInd*delta;
 fzWanted = (minFz: delta :maxFz)';

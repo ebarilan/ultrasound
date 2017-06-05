@@ -16,7 +16,7 @@ switch processType
         imageRecover = NUDFT(Gamma, scan, fz_mesh, fx_mesh , fsx);
     case 6
 %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
-        imageRecover = single(InterpNUFFT(Gamma, scan, fz_mesh, fx_mesh , fsx));
+        imageRecover = single(InterpNUFFT(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
     case 7
 %         profile on;
 %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
