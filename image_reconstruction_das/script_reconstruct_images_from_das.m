@@ -1,4 +1,4 @@
-function script_reconstruct_images_from_das(acquisition_type , phantom_type , data_type, IsEmbedded, numAngels)
+function script_reconstruct_images_from_das(acquisition_type , phantom_type , data_type, IsEmbedded, numAngels, spursConfig)
 %-- Script to be used as an example to manipulate the provided dataset
 
 %-- After choosing the specific configuration through acquisition_type, 
@@ -29,8 +29,10 @@ addpath(genpath('../src'));
 if nargin == 3
     numAngels = 1;
     IsEmbedded = 1;
+%     spursConfig = 0;
 elseif nargin == 4
     numAngels = 1;
+%     spursConfig = 0;
 end
 
 %-- Parameters
@@ -98,7 +100,7 @@ end
 %-- Create path to load corresponding files
 path_dataset = ['../../database/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_dataset_',data,'.hdf5'];
 path_scan = ['../../database/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_scan.hdf5'];
-path_reconstruted_img = ['../../reconstructed_image/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_img_from_',dataSave,'numOfAngles',num2str(numAngels),'Is_embedad',num2str(IsEmbedded),'.hdf5'];
+path_reconstruted_img = ['../../reconstructed_image/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_img_from_',dataSave,'.hdf5'];
 path_reconstruted_img_fig = ['../../reconstructed_image/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_img_from_',dataSave];
 
 %-- Read the corresponding dataset and the region where to reconstruct the image
@@ -127,9 +129,7 @@ switch data_type
     case 2
         image = das_rf(scan,dataset,pw_indices);
     case {3,4,5,6,7}
-        image = IQInterpFFT(scan,dataset,pw_indices, data_type, IsEmbedded);
-    case 8 
-        image = IQInterpFFT2(scan,dataset,pw_indices, data_type);
+        image = IQInterpFFT(scan,dataset,pw_indices, data_type, IsEmbedded, spursConfig);
     otherwise       %-- Do deal with bad values
         image = das_iq(scan,dataset,pw_indices);       
 end

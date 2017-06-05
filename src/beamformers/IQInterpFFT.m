@@ -1,4 +1,4 @@
-function image = IQInterpFFT(scan,dataset,pw_indices, processType, isEmbedded)
+function image = IQInterpFFT(scan,dataset,pw_indices, processType, isEmbedded, spursConfig)
 %% 1. Transform the signal to Fourier domain [f,fx]
 probeIdxTot = pw_indices{1};
 nAngles = numel(probeIdxTot);
@@ -20,7 +20,7 @@ if isEmbedded
     GammaMean = accumarray(idx,Gamma(:),[],@mean);
     fx_mesh = ux(:,1);  fz_mesh = ux(:,2);  Gamma = GammaMean;
     
-    imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded);
+    imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig);
 
     
 else
@@ -29,7 +29,7 @@ else
         probeIdx = probeIdxTot(i);
         [fx_mesh, fz_mesh, Gamma, fx, fsx] = Sampels2FourierDomain(dataset,probeIdx);
 %         [fx_mesh, fz_mesh, Gamma, fx, fsx] = Sampels2FourierDomainTanya(dataset,probeIdx);
-        imageRecoverI{i} = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded); 
+        imageRecoverI{i} = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig); 
     end
     if(0) % Print Plot Result Of Every Angle 
         PlotImageEveryAngle(imageRecoverI, probeIdxTot,scan); 
