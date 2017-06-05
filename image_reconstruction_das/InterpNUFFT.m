@@ -1,4 +1,4 @@
-function image = InterpNUFFT(sRes, scan, fz, x , fsx, Kappa_m,sqrtN)
+function image = InterpNUFFT(sRes, scan, fz, x , fsx)
 BW_x = 1/scan.dx;
 omX = 2*pi / BW_x * x(:); % omX = 2*pi / fsx * x(:);
 

@@ -82,8 +82,14 @@ switch data_type
         dataSave = 'idft';
     case {6,8}
         dataSave = 'nufft';
+        
+        run ../../../irt/setup.m
     case 7
         dataSave = 'SPURS';
+        
+        setenv('SPURS_DIR', '../../../SPURS_DEMO');
+        SPURS_work_dir = getenv('SPURS_DIR');
+        addpath(genpath(SPURS_work_dir));
     otherwise       %-- Do deal with bad values
         dataSave = 'iq';        
 end
@@ -135,7 +141,7 @@ disp(['Result saved in "',path_reconstruted_img,'"'])
 dynamic_range = 60;
 [~,fig] = image.show(dynamic_range);
 %-- Save results
-savefig(fig,strcat(path_reconstruted_img_fig,datestr(now,'dd-mm-yy_HH-MM'),'.fig'));
+savefig(fig,strcat(path_reconstruted_img_fig,'a',num2str(acquisition_type),'p', num2str(phantom_type),'t',num2str(data_type),'e',num2str(IsEmbedded),'a', num2str(numAngels),'_',datestr(now,'dd-mm-yy_HH-MM'),'.fig'));
 saveas(fig,path_reconstruted_img_fig,'jpeg');
 image.write_file(path_reconstruted_img);
 

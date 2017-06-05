@@ -41,7 +41,7 @@ sResInterp1(isnan(sResInterp1)) = 0;
 if(0)
 figure
 % mesh(fxAxesWantedMesh, fzWantedMesh, abs(sResInterp1));
-mesh(fxAxesWantedMesh, fzWantedMesh, abs(sResInterp1));
+scatter(fxAxesWantedMesh(:), fzWantedMesh(:),[],db(abs(sResInterp1(:))));
 title('\Gamma(f,f_x) After Interpolation','fontsize',24)
 xlabel('f_x','fontsize',18)
 ylabel('f_z','fontsize',18)

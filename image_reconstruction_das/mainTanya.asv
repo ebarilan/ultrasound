@@ -3,7 +3,7 @@
 
 ImageOpt = 1; %[1,2]
 ProccesOpt = 6; %[1, 4, 6];
-numAngels = 11;
+numAngels = 3;
 IsEmbedded = 1;
 acquisition_type = 1; %[1,2] - simulation, experiment
 
