@@ -15,14 +15,15 @@ switch processType
     case 5
         imageRecover = NUDFT(Gamma, scan, fz_mesh, fx_mesh , fsx);
     case 6
-        [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
-        imageRecover = single(InterpNUFFT(Gamma, scan, fz_mesh, fx_mesh , fsx,Kappa_m,sqrtN));
+%         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
+        imageRecover = single(InterpNUFFT(Gamma, scan, fz_mesh, fx_mesh , fsx));
     case 7
 %         profile on;
-        [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
+%         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
+        [b, Kappa_m,sqrtN] = SPURSInit2(Gamma, scan, fz_mesh, fx_mesh , fx, fsx, sumForierDomainFlag);
         BsplineDegree = 3;
         Rho = 1e-3;%%
-        Niterations = 2;
+        Niterations = 1;
         OverGridFactor = 2;
         FilterInImageSpace = 1;
         
