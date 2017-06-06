@@ -1,21 +1,39 @@
-function image = InterpNUFFT(sRes, scan, fz, x , fsx)
-BW_x = 1/scan.dx;
-omX = 2*pi / BW_x * x(:); % omX = 2*pi / fsx * x(:);
+function image = InterpNUFFT(sRes, scan, fz, x , fsx, sumForierDomainFlag)
+
 
 Nz = ceil(scan.z_axis(end)/scan.dz);
 delta = (1/scan.dz ) / Nz;
-minInd = floor(min(fz(:))/delta);
-maxInd = ceil(max(fz(:))/delta);
+if sumForierDomainFlag
+    minInd = floor(min(fz(:))/delta);
+    maxInd = ceil(max(fz(:))/delta);
+else 
+    minIndGlobal = 92;
+    maxIndGlobal = 507;
+    minInd = minIndGlobal;
+    maxInd = maxIndGlobal;
+end
+
 minFz = minInd*delta;
 maxFz = maxInd*delta; %for
 fzWanted = (minFz: delta :maxFz)';
 
+sqrtN = numel(fzWanted);
+
 zTmp = fz(:) - minFz;
-BW_z = 1/scan.dz;
+% BW_z = 1/scan.dz;
+BW_z = max(zTmp);
 omZ = 2*pi /BW_z * zTmp - pi; % omZ = 2*pi / max(zTmp) * zTmp - pi;
+
+BW_x = 1/scan.dx;
+xWantedBW = 1/((scan.x_axis(end) - scan.x_axis(1))/sqrtN);
+% omX = 2*pi / BW_x * x(:);
+omX = 2*pi / xWantedBW * x(:); % omX = 2*pi / fsx * x(:);
+
+
+
 om = double([omX, omZ ]);
-Nd = double([single(scan.Nx), single(Nz)]); 
-% Nd = double([single(size(fz,2)), single(numel(fzWanted))]);
+Nd = double([single(sqrtN), single(sqrtN)]); 
+% Nd = double([single(scan.Nx), single(Nz)]); 
 Jd = double([3,3]);
 Kd = double(2*Nd);
 %%%%!!!!!
