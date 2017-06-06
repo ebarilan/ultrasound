@@ -1,4 +1,4 @@
-function imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, sumForierDomainFlag)
+function imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, sumForierDomainFlag, spursConfig)
 
 %% 3. Transform back to image.
 %cases:
@@ -16,16 +16,26 @@ switch processType
         imageRecover = NUDFT(Gamma, scan, fz_mesh, fx_mesh , fsx);
     case 6
 %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
-        imageRecover = single(InterpNUFFT(Gamma, scan, fz_mesh, fx_mesh , fsx));
+        imageRecover = single(InterpNUFFT(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
     case 7
 %         profile on;
 %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
         [b, Kappa_m,sqrtN] = SPURSInit2(Gamma, scan, fz_mesh, fx_mesh , fx, fsx, sumForierDomainFlag);
-        BsplineDegree = 3;
-        Rho = 1e-3;%%
-        Niterations = 1;
-        OverGridFactor = 2;
-        FilterInImageSpace = 1;
+        if nargin < 9
+            BsplineDegree = 3;
+            Rho = 1e-3;%%
+            Niterations = 1;
+            OverGridFactor = 2;
+            FilterInImageSpace = 1;
+            savePsi = 0;
+        else
+            BsplineDegree = spursConfig.KernelFunctionDegree;
+            Rho = spursConfig.Rho;
+            Niterations = spursConfig.Niterations;
+            OverGridFactor = spursConfig.OverGridFactor;
+            FilterInImageSpace = spursConfig.FilterInImageSpace;
+            savePsi = spursConfig.SavePSI;
+        end
         
         SPURS_settings.sqrtN = sqrtN;
         SPURS_settings.KernelFunctionString = 'Bspline';
@@ -36,7 +46,7 @@ switch processType
         SPURS_settings.UseW = 0;
         SPURS_settings.ForceGenrateNewPhi = 0;
         SPURS_settings.ForceFactorPsi = 0;
-        SPURS_settings.SavePSI = 0;
+        SPURS_settings.SavePSI = savePsi;
         SPURS_settings.OverGridFactor = OverGridFactor;
         SPURS_settings.alpha = 1;
         SPURS_settings.CalcOptimalAlpha = 1;
@@ -47,6 +57,11 @@ switch processType
 %         [ OutputImages_imag  , b_hat] = SPURS(double(imag(b)), double(Kappa_m), SPURS_settings);
         imageRecover = OutputImages(:,:,end);
 %         profile viewer;
+    case 8
+%         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
+        imageRecover = single(InterpNUFFT2(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
+    case 9
+        imageRecover = single(InterpLinearSlice(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
 end
 
 

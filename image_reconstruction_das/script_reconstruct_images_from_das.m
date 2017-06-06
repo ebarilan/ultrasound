@@ -1,4 +1,4 @@
-function script_reconstruct_images_from_das(acquisition_type , phantom_type , data_type, IsEmbedded, numAngels)
+function script_reconstruct_images_from_das(acquisition_type , phantom_type , data_type, IsEmbedded, numAngels, spursConfig)
 %-- Script to be used as an example to manipulate the provided dataset
 
 %-- After choosing the specific configuration through acquisition_type, 
@@ -69,6 +69,8 @@ switch data_type
         data = 'iq';        
 end
 
+strSpurs = '';
+
 switch data_type
     case 1
         dataSave = 'iq';
@@ -90,6 +92,12 @@ switch data_type
         setenv('SPURS_DIR', '../../../SPURS_DEMO');
         SPURS_work_dir = getenv('SPURS_DIR');
         addpath(genpath(SPURS_work_dir));
+        
+        strSpurs = strcat('Sd',num2str(spursConfig.KernelFunctionDegree),...
+                          'Si',num2str(spursConfig.Niterations),...
+                          'So',num2str(spursConfig.OverGridFactor));
+    case 9
+        dataSave = 'intLinear1D';
     otherwise       %-- Do deal with bad values
         dataSave = 'iq';        
 end
@@ -98,7 +106,7 @@ end
 %-- Create path to load corresponding files
 path_dataset = ['../../database/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_dataset_',data,'.hdf5'];
 path_scan = ['../../database/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_scan.hdf5'];
-path_reconstruted_img = ['../../reconstructed_image/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_img_from_',dataSave,'numOfAngles',num2str(numAngels),'Is_embedad',num2str(IsEmbedded),'.hdf5'];
+path_reconstruted_img = ['../../reconstructed_image/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_img_from_',dataSave,'.hdf5'];
 path_reconstruted_img_fig = ['../../reconstructed_image/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_img_from_',dataSave];
 
 %-- Read the corresponding dataset and the region where to reconstruct the image
@@ -126,10 +134,8 @@ switch data_type
         image = das_iq(scan,dataset,pw_indices);
     case 2
         image = das_rf(scan,dataset,pw_indices);
-    case {3,4,5,6,7}
-        image = IQInterpFFT(scan,dataset,pw_indices, data_type, IsEmbedded);
-    case 8 
-        image = IQInterpFFT2(scan,dataset,pw_indices, data_type);
+    case {3,4,5,6,7,8,9}
+        image = IQInterpFFT(scan,dataset,pw_indices, data_type, IsEmbedded, spursConfig);
     otherwise       %-- Do deal with bad values
         image = das_iq(scan,dataset,pw_indices);       
 end
@@ -141,7 +147,7 @@ disp(['Result saved in "',path_reconstruted_img,'"'])
 dynamic_range = 60;
 [~,fig] = image.show(dynamic_range);
 %-- Save results
-savefig(fig,strcat(path_reconstruted_img_fig,'a',num2str(acquisition_type),'p', num2str(phantom_type),'t',num2str(data_type),'e',num2str(IsEmbedded),'a', num2str(numAngels),'_',datestr(now,'dd-mm-yy_HH-MM'),'.fig'));
+savefig(fig,strcat(path_reconstruted_img_fig,'a',num2str(acquisition_type),'p', num2str(phantom_type),'t',num2str(data_type),'e',num2str(IsEmbedded),'a', num2str(numAngels),strSpurs,'_',datestr(now,'dd-mm-yy_HH-MM'),'.fig'));
 saveas(fig,path_reconstruted_img_fig,'jpeg');
 image.write_file(path_reconstruted_img);
 
