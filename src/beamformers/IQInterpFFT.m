@@ -16,17 +16,6 @@ if isEmbedded
     end
     fx_mesh = cat(1,fx_mesh_ceil{:}); fz_mesh = cat(1,fz_mesh_ceil{:}); Gamma =cat(1,Gamma_ceil{:});
     
-<<<<<<< HEAD
-    % Average Gamma Over Same Coordinates
-    [ux,~,idx] = unique([fx_mesh(:), fz_mesh(:)],'rows');
-    GammaMean = accumarray(idx,Gamma(:),[],@mean);
-    fx_mesh = ux(:,1);  fz_mesh = ux(:,2);  Gamma = GammaMean;
-    
-    [imageRecover,imageFFT] = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig);
-=======
-    imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig);
->>>>>>> 0da018a837fe7c2cedf3360244b33d2dc085cc6a
-
     
 else
     imageRecoverI = cell(nAngles, 1);
