@@ -21,15 +21,9 @@ switch processType
         %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
         imageRecover = single(InterpNUFFT(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
     case 7
-<<<<<<< HEAD
-        %         profile on;
-        %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
-        [b, Kappa_m,sqrtN] = SPURSInit2(Gamma, scan, fz_mesh, fx_mesh , fx, fsx, sumForierDomainFlag);
-=======
 %         profile on;
 %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
         [b, Kappa_m,sqrtN, W] = SPURSInit2(Gamma, scan, fz_mesh, fx_mesh , fx, fsx, sumForierDomainFlag);
->>>>>>> 0da018a837fe7c2cedf3360244b33d2dc085cc6a
         if nargin < 9
             BsplineDegree = 3;
             Rho = 1e-3;%%
@@ -63,20 +57,12 @@ switch processType
         SPURS_settings.CalcOptimalAlpha = 1;
         SPURS_settings.FilterInImageSpace = FilterInImageSpace;
         
-<<<<<<< HEAD
-%         [ OutputImages , b_hat] = SPURS(double(b), double(Kappa_m), SPURS_settings);
-        [ OutputImages , b_hat, imageFFT] = SPURS_Tanya(double(b), double(Kappa_m), SPURS_settings);
-        
-        %         [ OutputImages_real  , b_hat] = SPURS(double(real(b)), double(Kappa_m), SPURS_settings);
-        %         [ OutputImages_imag  , b_hat] = SPURS(double(imag(b)), double(Kappa_m), SPURS_settings);
-=======
         SPURS_settings.UseW_Regularization = UseW_Regularization;
         SPURS_settings.W_Regularization = W;
         
         [ OutputImages , b_hat] = SPURS(double(b), double(Kappa_m), SPURS_settings);
 %         [ OutputImages_real  , b_hat] = SPURS(double(real(b)), double(Kappa_m), SPURS_settings);
 %         [ OutputImages_imag  , b_hat] = SPURS(double(imag(b)), double(Kappa_m), SPURS_settings);
->>>>>>> 0da018a837fe7c2cedf3360244b33d2dc085cc6a
         imageRecover = OutputImages(:,:,end);
         %         profile viewer;
     case 8

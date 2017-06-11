@@ -15,7 +15,7 @@ if isEmbedded
         fx_mesh_ceil{i} = fx_mesh_tmp(:); fz_mesh_ceil{i} = fz_mesh_tmp(:); Gamma_ceil{i} = Gamma_tmp(:);
     end
     fx_mesh = cat(1,fx_mesh_ceil{:}); fz_mesh = cat(1,fz_mesh_ceil{:}); Gamma =cat(1,Gamma_ceil{:});
-    
+    [imageRecover,imageFFT] = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig); 
     
 else
     imageRecoverI = cell(nAngles, 1);
