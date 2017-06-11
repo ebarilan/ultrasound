@@ -1,4 +1,4 @@
-function imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, sumForierDomainFlag, spursConfig)
+function [imageRecover,imageFFT] = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, sumForierDomainFlag, spursConfig)
 
 %% 3. Transform back to image.
 %cases:
@@ -6,7 +6,7 @@ function imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_me
 %       4 - Interpolate the signal in baseband. IFFT.
 %       5 - Using direct iDFT. Accurate transform. (Time issue)
 %       6 - Using NUFFT (Jeff Fessler).
-
+imageFFT = 0;
 switch processType
     case 3
         imageRecover = single(InterpFullFreq(Gamma, scan, fx , fz_mesh, fx_mesh));
@@ -15,11 +15,11 @@ switch processType
     case 5
         imageRecover = NUDFT(Gamma, scan, fz_mesh, fx_mesh , fsx);
     case 6
-%         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
+        %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
         imageRecover = single(InterpNUFFT(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
     case 7
-%         profile on;
-%         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
+        %         profile on;
+        %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
         [b, Kappa_m,sqrtN] = SPURSInit2(Gamma, scan, fz_mesh, fx_mesh , fx, fsx, sumForierDomainFlag);
         if nargin < 9
             BsplineDegree = 3;
@@ -52,14 +52,16 @@ switch processType
         SPURS_settings.CalcOptimalAlpha = 1;
         SPURS_settings.FilterInImageSpace = FilterInImageSpace;
         
-        [ OutputImages , b_hat] = SPURS(double(b), double(Kappa_m), SPURS_settings);
-%         [ OutputImages_real  , b_hat] = SPURS(double(real(b)), double(Kappa_m), SPURS_settings);
-%         [ OutputImages_imag  , b_hat] = SPURS(double(imag(b)), double(Kappa_m), SPURS_settings);
+%         [ OutputImages , b_hat] = SPURS(double(b), double(Kappa_m), SPURS_settings);
+        [ OutputImages , b_hat, imageFFT] = SPURS_Tanya(double(b), double(Kappa_m), SPURS_settings);
+        
+        %         [ OutputImages_real  , b_hat] = SPURS(double(real(b)), double(Kappa_m), SPURS_settings);
+        %         [ OutputImages_imag  , b_hat] = SPURS(double(imag(b)), double(Kappa_m), SPURS_settings);
         imageRecover = OutputImages(:,:,end);
-%         profile viewer;
+        %         profile viewer;
     case 8
-%         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
-        imageRecover = single(InterpNUFFT2(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
+        %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
+        [imageRecover, imageFFT] = (InterpNUFFT2(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
     case 9
         imageRecover = single(InterpLinearSlice(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
 end

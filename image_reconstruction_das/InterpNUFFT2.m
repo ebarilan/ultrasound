@@ -1,4 +1,4 @@
-function image = InterpNUFFT2(sRes, scan, fz, x , fsx, sumForierDomainFlag)
+function  [image,imageFFT] = InterpNUFFT2(sRes, scan, fz, x , fsx, sumForierDomainFlag)
 
 
 Nz = ceil(scan.z_axis(end)/scan.dz);
