@@ -4,8 +4,8 @@ ImageOpt = [1,2];
 if(0)
 %% 0.NUFFT
 ProccesOpt = 6;
-numAngels = [1,3,5,7,9,11];
-IsEmbedded = [0,1];
+numAngels = [11];% numAngels = [1,3,5,7,9,11];
+IsEmbedded = 1;%[0,1];
 runScripts(numAngels, ProccesOpt, IsEmbedded, ImageOpt, acquisition_type, []);
 end
 %% 1.Spurs
@@ -14,6 +14,7 @@ ProccesOpt = 7;
 spursConfig.Rho = 1e-3;
 spursConfig.FilterInImageSpace = 1;
 spursConfig.SavePSI = 0;
+spursConfig.UseW_Regularization = 0;%%!!!!
 
 %% 1.1 Default
 % Angle        = 1,3,5,7,9,11
