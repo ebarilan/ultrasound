@@ -1,4 +1,4 @@
-function [b, Kappa_m,sqrtN] = SPURSInit2(Gamma, scan, fz, x , fx, fsx, sumForierDomainFlag)
+function [b, Kappa_m,sqrtN, W] = SPURSInit2(Gamma, scan, fz, x , fx, fsx, sumForierDomainFlag)
 % Gamma = conj(Gamma);
 b = Gamma(:);
 %  b = reshape(Gamma,1,[]).';
@@ -63,4 +63,12 @@ Kappa_m = [Kappa_x , Kappa_z];
 % Kappa_z = [Kappa_z; z2(:)];
 % Kappa_m = [Kappa_x , Kappa_z];
 % b = [b;b2];
+
+ax = (1:sqrtN)'-sqrtN/2;
+[xAx,zAx] = meshgrid(ax,ax);
+mu = mean(double(Kappa_m));
+sigma = diag(double([std(Kappa_x, abs(b)), 10*std(Kappa_z, abs(b))])).^2;
+gaussCloud = mvnpdf(double([xAx(:) , zAx(:)]),mu,sigma);
+W = 1 - gaussCloud;
+W = -db(gaussCloud);
 end

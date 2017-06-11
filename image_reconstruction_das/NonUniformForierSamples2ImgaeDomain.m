@@ -11,6 +11,9 @@ switch processType
     case 3
         imageRecover = single(InterpFullFreq(Gamma, scan, fx , fz_mesh, fx_mesh));
     case 4
+        % Average Gamma Over Same Coordinates
+        [fx_mesh, fz_mesh, Gamma] = uniqueCordinates(fx_mesh, fz_mesh, Gamma);
+        
         imageRecover = InterpFreqBB(Gamma, scan, fx , fz_mesh, fx_mesh, sumForierDomainFlag);
     case 5
         imageRecover = NUDFT(Gamma, scan, fz_mesh, fx_mesh , fsx);
@@ -20,7 +23,7 @@ switch processType
     case 7
 %         profile on;
 %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
-        [b, Kappa_m,sqrtN] = SPURSInit2(Gamma, scan, fz_mesh, fx_mesh , fx, fsx, sumForierDomainFlag);
+        [b, Kappa_m,sqrtN, W] = SPURSInit2(Gamma, scan, fz_mesh, fx_mesh , fx, fsx, sumForierDomainFlag);
         if nargin < 9
             BsplineDegree = 3;
             Rho = 1e-3;%%
@@ -28,6 +31,7 @@ switch processType
             OverGridFactor = 2;
             FilterInImageSpace = 1;
             savePsi = 0;
+            UseW_Regularization = 0;
         else
             BsplineDegree = spursConfig.KernelFunctionDegree;
             Rho = spursConfig.Rho;
@@ -35,6 +39,7 @@ switch processType
             OverGridFactor = spursConfig.OverGridFactor;
             FilterInImageSpace = spursConfig.FilterInImageSpace;
             savePsi = spursConfig.SavePSI;
+            UseW_Regularization = spursConfig.UseW_Regularization;
         end
         
         SPURS_settings.sqrtN = sqrtN;
@@ -52,6 +57,9 @@ switch processType
         SPURS_settings.CalcOptimalAlpha = 1;
         SPURS_settings.FilterInImageSpace = FilterInImageSpace;
         
+        SPURS_settings.UseW_Regularization = UseW_Regularization;
+        SPURS_settings.W_Regularization = W;
+        
         [ OutputImages , b_hat] = SPURS(double(b), double(Kappa_m), SPURS_settings);
 %         [ OutputImages_real  , b_hat] = SPURS(double(real(b)), double(Kappa_m), SPURS_settings);
 %         [ OutputImages_imag  , b_hat] = SPURS(double(imag(b)), double(Kappa_m), SPURS_settings);
@@ -61,6 +69,9 @@ switch processType
 %         [b, Kappa_m,sqrtN] = SPURSInit(Gamma, scan, fz_mesh, fx_mesh , fx, fsx);
         imageRecover = single(InterpNUFFT2(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
     case 9
+        % Average Gamma Over Same Coordinates
+        [fx_mesh, fz_mesh, Gamma] = uniqueCordinates(fx_mesh, fz_mesh, Gamma);
+        
         imageRecover = single(InterpLinearSlice(Gamma, scan, fz_mesh, fx_mesh , fsx, sumForierDomainFlag));
 end
 

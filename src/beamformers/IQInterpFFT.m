@@ -15,11 +15,6 @@ if isEmbedded
     end
     fx_mesh = cat(1,fx_mesh_ceil{:}); fz_mesh = cat(1,fz_mesh_ceil{:}); Gamma =cat(1,Gamma_ceil{:});
     
-    % Average Gamma Over Same Coordinates
-    [ux,~,idx] = unique([fx_mesh(:), fz_mesh(:)],'rows');
-    GammaMean = accumarray(idx,Gamma(:),[],@mean);
-    fx_mesh = ux(:,1);  fz_mesh = ux(:,2);  Gamma = GammaMean;
-    
     imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig);
 
     
