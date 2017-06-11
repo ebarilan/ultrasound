@@ -1,8 +1,9 @@
-function image = IQInterpFFT(scan,dataset,pw_indices, processType, isEmbedded, spursConfig)
+function [image,imageFFT] = IQInterpFFT(scan,dataset,pw_indices, processType, isEmbedded, spursConfig)
 %% 1. Transform the signal to Fourier domain [f,fx]
 probeIdxTot = pw_indices{1};
 nAngles = numel(probeIdxTot);
 
+imageFFT = 0;
 if isEmbedded
     fx_mesh_ceil = cell(nAngles, 1); fz_mesh_ceil = cell(nAngles, 1); Gamma_ceil = cell(nAngles, 1);
     for i = 1:nAngles
@@ -15,7 +16,16 @@ if isEmbedded
     end
     fx_mesh = cat(1,fx_mesh_ceil{:}); fz_mesh = cat(1,fz_mesh_ceil{:}); Gamma =cat(1,Gamma_ceil{:});
     
+<<<<<<< HEAD
+    % Average Gamma Over Same Coordinates
+    [ux,~,idx] = unique([fx_mesh(:), fz_mesh(:)],'rows');
+    GammaMean = accumarray(idx,Gamma(:),[],@mean);
+    fx_mesh = ux(:,1);  fz_mesh = ux(:,2);  Gamma = GammaMean;
+    
+    [imageRecover,imageFFT] = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig);
+=======
     imageRecover = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig);
+>>>>>>> 0da018a837fe7c2cedf3360244b33d2dc085cc6a
 
     
 else
@@ -75,6 +85,7 @@ image.transmit_f_number = 0;
 % image.receive_f_number = 0; %%rx_f_number;
 image.transmit_apodization_window = 'none';
 image.receive_apodization_window = 'Tukey 25%';
+
 
 titleName = [];
 
