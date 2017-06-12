@@ -26,6 +26,17 @@ end
 
 lambda = single(dataset.c0)./f';
 S_f_x = fftshift( fft(dataset.data(:,:,probeIdx),[],1) ,1);
+
+% Hamming Window
+windowOption = 1;
+if windowOption
+    S_F = fftshift( fft(S_f_x,[],2) ,2);
+    h = hamming(numel(fx)).';
+    S_F_Windowed = bsxfun(@times, S_F, h);
+    S_f_x_Windowed = ifft( ifftshift( S_F_Windowed,2),[],2);
+    S_f_x = S_f_x_Windowed;
+end
+
 fx0 = sin(theta)./lambda;
 xGeo = linspace( dataset.probe_geometry(1,1), dataset.probe_geometry(end,1), size(dataset.probe_geometry,1));
 expPhase = exp(1i*2*pi * fx0 * xGeo );
@@ -67,10 +78,25 @@ if(0)
     scatter(unwrapLine, f,[], 'd', 'filled')
     hold off;
 end
-
-
-
-
+if(0)
+%% Hamming Window
+windowOption = 0;
+R = [cos(theta) -sin(theta); sin(theta) cos(theta)];
+% R = rotx(double(theta)*360/(2*pi))
+h2d = repmat(hamming(size(S,2)).',size(S,1),1);
+R * h2
+h2dRotate = fftshift( fft( ifft(ifftshift(h2d,2),[],2).*expPhase,[],2) , 2);
+if windowOption
+    h = hamming(size(S,2)).';
+    [~,indSort] = sort(fx_mesh,2);
+    S_Window = zeros(size(S));
+    [~,indSortReverse] = sort(indSort,2);
+    for i = 1:size(S,1)
+        S_Window(i,:) = S(i,:) .* h(indSortReverse(i,:));
+    end
+ 
+end
+end
 %% 2. Transform from [f,fx] -> [fz,fx]
 
 %2.1 fz Calculation
