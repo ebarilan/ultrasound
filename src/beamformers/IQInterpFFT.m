@@ -18,14 +18,14 @@ if isEmbedded
     fx_mesh = cat(1,fx_mesh_ceil{:}); fz_mesh = cat(1,fz_mesh_ceil{:}); Gamma =cat(1,Gamma_ceil{:});
     
     
-    marginOnly = 1;%%%%%%%%%%%%%%%!!!!!!!!!!!!!!!!!!
+    marginOnly = 0;%%%%%%%%%%%%%%%!!!!!!!!!!!!!!!!!!
     
     if marginOnly
         % Embbeding only the frequency margin
         midIndAngle = ceil(nAngles/2);
         minFx = min(fx_mesh_ceil{midIndAngle});
         maxFx = max(fx_mesh_ceil{midIndAngle});
-        cond = @(x) ~((x < minFx) | (x > maxFx));
+        cond = @(x) ((x < minFx) | (x > maxFx));
         fx_mesh_margin_only = cell(nAngles,1); fz_mesh_margin_only = cell(nAngles,1); Gamma_margin_only = cell(nAngles,1);
         for i = 1:nAngles
             if i == midIndAngle
@@ -38,6 +38,9 @@ if isEmbedded
         
         fx_mesh = cat(1,fx_mesh_margin_only{:}); fz_mesh = cat(1,fz_mesh_margin_only{:}); Gamma =cat(1,Gamma_margin_only{:});        
     end
+    
+    HistDiffFz(fx_mesh, fz_mesh, nAngles);
+    
     [imageRecover,imageFFT] = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig); 
     
 else
