@@ -147,7 +147,8 @@ disp(['Result saved in "',path_reconstruted_img,'"'])
 dynamic_range = 60;
 [~,fig] = image.show(dynamic_range);
 %-- Save results
-savefig(fig,strcat(path_reconstruted_img_fig,'a',num2str(acquisition_type),'p', num2str(phantom_type),'t',num2str(data_type),'e',num2str(IsEmbedded),'a', num2str(numAngels),strSpurs,'_',datestr(now,'dd-mm-yy_HH-MM'),'.fig'));
+figName = strcat(path_reconstruted_img_fig,'a',num2str(acquisition_type),'p', num2str(phantom_type),'t',num2str(data_type),'e',num2str(IsEmbedded),'a', num2str(numAngels),strSpurs,'_',datestr(now,'dd-mm-yy_HH-MM'));
+savefig(fig,strcat(figName,'.fig'));
 saveas(fig,path_reconstruted_img_fig,'jpeg');
 image.write_file(path_reconstruted_img);
 
@@ -159,3 +160,9 @@ indNumPart = ceil(size(scan.z_matrix,1)*part);
 savefig(fig,strcat(path_reconstruted_img_fig,datestr(now,'dd-mm-yy_HH-MM'),'_Part.fig'));
 saveas(fig,strcat(path_reconstruted_img_fig,'_Part'),'jpeg');
 end
+
+% path_phantom = ['../../database/',acquisition,'/',phantom,'/',phantom,'_',acqui,'_phantom.hdf5'];
+% flag_simu = num2str(-1*acquisition_type+2);
+% flag_display = '1';
+% path_output_log = ['../../evaluation/',phantom,'/',phantom,'_',acqui,'_evaluation_from_',data, figName,'.txt'];
+% tools.exec_evaluation_resolution_distorsion(path_scan,path_phantom,image,flag_simu,flag_display,path_output_log)

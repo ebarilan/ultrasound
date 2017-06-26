@@ -1,4 +1,4 @@
-function exec_evaluation_resolution_distorsion(path_scan,path_phantom,path_img,flag_simu,flag_display,path_output)
+function exec_evaluation_resolution_distorsion(path_scan,path_phantom,image,flag_simu,flag_display,path_output)
   
     %-- Function used for the evaluation of resolution in ultrasound imaging
     
@@ -22,8 +22,8 @@ function exec_evaluation_resolution_distorsion(path_scan,path_phantom,path_img,f
     scan.read_file(path_scan);
     pht = us_phantom();
     pht.read_file(path_phantom);
-    image = us_image();
-    image.read_file(path_img);
+%     image = us_image();
+%     image.read_file(path_img);
 
 
     %-- Perform testing for resolution

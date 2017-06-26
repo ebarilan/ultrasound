@@ -36,12 +36,16 @@ if windowOption
     S_f_x_Windowed = ifft( ifftshift( S_F_Windowed,2),[],2);
     S_f_x = S_f_x_Windowed;
 end
+H_raw = repmat(h,size(S_F,1), 1);
+H_f_x = ifft( ifftshift( H_raw,2),[],2);
 
 fx0 = sin(theta)./lambda;
 xGeo = linspace( dataset.probe_geometry(1,1), dataset.probe_geometry(end,1), size(dataset.probe_geometry,1));
 expPhase = exp(1i*2*pi * fx0 * xGeo );
 S = fftshift( fft(S_f_x.*expPhase,[],2) , 2);
 S = single(S);
+
+H_S = fftshift( fft(H_f_x.*expPhase,[],2) , 2);
 
 if theta <= 0
     unwrapLine = fsx/2 + fx0;
@@ -110,6 +114,8 @@ tmpNom = ( (f_mesh / dataset.c0).^2  -  fxminusfx0.^2 ).^0.5;
 tmpDenom = -4*pi* (f_mesh / dataset.c0).^2;
 constS = tmpNom ./ tmpDenom;
 Gamma = S .* constS;
+
+H_Gamma = H_S .* constS;
 
 if(0)
     figure

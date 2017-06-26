@@ -12,9 +12,9 @@
 %-- $Date: 2016/03/01 $  
 
 
-clear all;
-close all;
-clc;
+% clear all;
+% close all;
+% clc;
 addpath(genpath('../src'));
 
 
