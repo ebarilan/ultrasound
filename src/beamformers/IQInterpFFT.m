@@ -51,7 +51,7 @@ else
 %         [fx_mesh, fz_mesh, Gamma, fx, fsx] = Sampels2FourierDomainTanya(dataset,probeIdx);
         imageRecoverI{i} = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig); 
     end
-    if(1) % Print Plot Result Of Every Angle 
+    if(0) % Print Plot Result Of Every Angle 
         PlotImageEveryAngle(imageRecoverI, probeIdxTot,scan,dataset); 
     end
     
