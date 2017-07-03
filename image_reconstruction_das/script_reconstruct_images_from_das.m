@@ -98,6 +98,9 @@ switch data_type
                           'So',num2str(spursConfig.OverGridFactor));
     case 9
         dataSave = 'intLinear1D';
+    case 10
+        dataSave = 'NufftForward';
+        run ../../../irt/setup.m
     otherwise       %-- Do deal with bad values
         dataSave = 'iq';        
 end
@@ -136,6 +139,8 @@ switch data_type
         image = das_rf(scan,dataset,pw_indices);
     case {3,4,5,6,7,8,9}
         image = IQInterpFFT(scan,dataset,pw_indices, data_type, IsEmbedded, spursConfig);
+    case 10
+        image = IQInterpFFTForward(scan,dataset,pw_indices, data_type, IsEmbedded, spursConfig);
     otherwise       %-- Do deal with bad values
         image = das_iq(scan,dataset,pw_indices);       
 end

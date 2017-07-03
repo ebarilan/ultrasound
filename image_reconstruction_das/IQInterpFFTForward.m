@@ -1,58 +1,23 @@
-function [image,imageFFT] = IQInterpFFT(scan,dataset,pw_indices, processType, isEmbedded, spursConfig)
+function [image,imageFFT] = IQInterpFFTForward(scan,dataset,pw_indices, processType, isEmbedded, spursConfig)
 %% 1. Transform the signal to Fourier domain [f,fx]
 probeIdxTot = pw_indices{1};
 nAngles = numel(probeIdxTot);
 
 imageFFT = 0;
 if isEmbedded
-    fx_mesh_ceil = cell(nAngles, 1); fz_mesh_ceil = cell(nAngles, 1); Gamma_ceil = cell(nAngles, 1);
-    for i = 1:nAngles
-        probeIdx = probeIdxTot(i);
-        
-        [fx_mesh_tmp, fz_mesh_tmp, Gamma_tmp, fx, fsx] = Sampels2FourierDomain(dataset,probeIdx);
-%         [fx_mesh_tmp, fz_mesh_tmp, Gamma_tmp, fx, fsx] = Sampels2FourierDomainTanya(dataset,probeIdx);
 
-        fx_mesh_ceil{i} = fx_mesh_tmp(:); fz_mesh_ceil{i} = fz_mesh_tmp(:); Gamma_ceil{i} = Gamma_tmp(:);
-    end
-    
-    fx_mesh = cat(1,fx_mesh_ceil{:}); fz_mesh = cat(1,fz_mesh_ceil{:}); Gamma =cat(1,Gamma_ceil{:});
-    
-    
-    marginOnly = 0;%%%%%%%%%%%%%%%!!!!!!!!!!!!!!!!!!
-    
-    if marginOnly
-        % Embbeding only the frequency margin
-        midIndAngle = ceil(nAngles/2);
-        minFx = min(fx_mesh_ceil{midIndAngle});
-        maxFx = max(fx_mesh_ceil{midIndAngle});
-        cond = @(x) ((x < minFx) | (x > maxFx));
-        fx_mesh_margin_only = cell(nAngles,1); fz_mesh_margin_only = cell(nAngles,1); Gamma_margin_only = cell(nAngles,1);
-        for i = 1:nAngles
-            if i == midIndAngle
-                fx_mesh_margin_only{i} = fx_mesh_ceil{i}; fz_mesh_margin_only{i} = fz_mesh_ceil{i}; Gamma_margin_only{i} = Gamma_ceil{i};
-%                 fx_mesh_margin_only{i} = repmat(fx_mesh_margin_only{i},floor(nAngles/2/10),1); fz_mesh_margin_only{i} = repmat(fz_mesh_margin_only{i},floor(nAngles/2/10),1); Gamma_margin_only{i} = repmat(Gamma_margin_only{i},floor(nAngles/2/10),1);
-                continue; 
-            end
-            fx_mesh_margin_only{i} = fx_mesh_ceil{i}(cond(fx_mesh_ceil{i})); fz_mesh_margin_only{i} = fz_mesh_ceil{i}(cond(fx_mesh_ceil{i})); Gamma_margin_only{i} = Gamma_ceil{i}(cond(fx_mesh_ceil{i}));
-        end
-        
-        fx_mesh = cat(1,fx_mesh_margin_only{:}); fz_mesh = cat(1,fz_mesh_margin_only{:}); Gamma =cat(1,Gamma_margin_only{:});        
-    end
-    
-    HistDiffFz(fx_mesh, fz_mesh, nAngles);
-    
-    [imageRecover,imageFFT] = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig); 
-    
 else
     imageRecoverI = cell(nAngles, 1);
     for i = 1:nAngles
         probeIdx = probeIdxTot(i);
-        [fx_mesh, fz_mesh, Gamma, fx, fsx] = Sampels2FourierDomain(dataset,probeIdx);
+        [fx_mesh_tmp, fz_mesh_tmp, Gamma_tmp, fx, fsx] = Sampels2FourierDomain(dataset,probeIdx);%%%%%%!!!!!!!!!!!
+        
+        imageRecoverI{i} = Sampels2NUFourierDomain(dataset,probeIdx,scan, fx_mesh_tmp, fz_mesh_tmp, Gamma_tmp);
 %         [fx_mesh, fz_mesh, Gamma, fx, fsx] = Sampels2FourierDomainTanya(dataset,probeIdx);
-        imageRecoverI{i} = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig); 
+%         imageRecoverI{i} = NonUniformForierSamples2ImgaeDomain(scan, fx_mesh, fz_mesh, Gamma, fx, fsx, processType, isEmbedded, spursConfig); 
     end
-    if(1) % Print Plot Result Of Every Angle 
-        PlotImageEveryAngle(imageRecoverI, probeIdxTot,scan,dataset); 
+    if(0) % Print Plot Result Of Every Angle 
+        PlotImageEveryAngle(imageRecoverI, probeIdxTot,scan); 
     end
     
     imageRecoverI = cat(3,imageRecoverI{:});
@@ -119,6 +84,8 @@ switch processType
         titleName = [titleName,'NUFFT 1D'];
     case 9
         titleName = [titleName,'Linear Interpolation 1D'];
+    case 10
+        titleName = [titleName,'NUFFT Forward'];
 end
 image.name = titleName;
 

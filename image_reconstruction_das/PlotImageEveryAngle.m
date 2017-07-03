@@ -1,4 +1,4 @@
-function PlotImageEveryAngle(imageRecoverI, probeIdxTot,scan)
+function PlotImageEveryAngle(imageRecoverI, probeIdxTot,scan, dataset)
 for idxP = 1:numel(probeIdxTot)
     env = imageRecoverI{idxP};
     im = 20*log10(env./max(env(:)));

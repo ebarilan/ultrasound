@@ -1,9 +1,9 @@
-function image = InterpNUFFT(sRes, scan, fz, x , fsx, sumForierDomainFlag)
+function image = InterpNUFFT(sRes, scan, fz, x , fsx, isEmbedded)
 
 
 Nz = ceil(scan.z_axis(end)/scan.dz);
 delta = (1/scan.dz ) / Nz;
-if sumForierDomainFlag
+if isEmbedded
     minInd = floor(min(fz(:))/delta);
     maxInd = ceil(max(fz(:))/delta);
 else 
@@ -21,7 +21,8 @@ sqrtN = numel(fzWanted);
 
 zTmp = fz(:) - minFz;
 % BW_z = 1/scan.dz;
-BW_z = max(zTmp);
+% BW_z = max(zTmp); %%%%%!!!!!!!!!!!!!!!!!
+BW_z = maxFz - minFz;
 omZ = 2*pi /BW_z * zTmp - pi; % omZ = 2*pi / max(zTmp) * zTmp - pi;
 
 BW_x = 1/scan.dx;

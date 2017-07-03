@@ -28,13 +28,16 @@ lambda = single(dataset.c0)./f';
 S_f_x = fftshift( fft(dataset.data(:,:,probeIdx),[],1) ,1);
 
 % Hamming Window
-windowOption = 1;
+windowOption = 0;
 if windowOption
     S_F = fftshift( fft(S_f_x,[],2) ,2);
     h = hamming(numel(fx)).';
     S_F_Windowed = bsxfun(@times, S_F, h);
     S_f_x_Windowed = ifft( ifftshift( S_F_Windowed,2),[],2);
     S_f_x = S_f_x_Windowed;
+else
+    S_F = fftshift( fft(S_f_x,[],2) ,2);
+    h = hamming(numel(fx)).';
 end
 H_raw = repmat(h,size(S_F,1), 1);
 H_f_x = ifft( ifftshift( H_raw,2),[],2);

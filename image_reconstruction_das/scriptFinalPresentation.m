@@ -1,11 +1,11 @@
 acquisition_type = 1;
 ImageOpt = 1;%[1,2];
 
-if(1)
+if(0)
 %% 0.NUFFT
 ProccesOpt = 6;
-numAngels = 9;%[1,3,11,75];%[1,3,5,7,9,11];
-IsEmbedded = 1;%[0,1];
+numAngels = 1;%[1,3,11,75];%[1,3,5,7,9,11];
+IsEmbedded = 0;%[0,1];
 runScripts(numAngels, ProccesOpt, IsEmbedded, ImageOpt, acquisition_type, []);
 end
 %% 1.Spurs
@@ -27,8 +27,8 @@ spursConfig.KernelFunctionDegree = 3;
 spursConfig.Niterations = 1;
 spursConfig.OverGridFactor = 1;
 
-IsEmbedded = 1;
-numAngels = 7;%[1,3,5,7,9];
+IsEmbedded = 0;
+numAngels = 3;%[1,3,5,7,9];
 
 runScripts(numAngels, ProccesOpt, IsEmbedded, ImageOpt, acquisition_type, spursConfig);
 end
