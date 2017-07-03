@@ -68,6 +68,8 @@ fxSNonUniformClean = fxSNonUniformReal(indCond);
 % scatter(fxSNonUniformClean(:), fSNonUniformCleanBB(:) + BW_f);
 % hold off
 
+notBug = 0;
+if notBug
 %%%%%%%%%%%%!!!!!!!!!!!!!!!!!!!!
 fSNonUniformCleanRF = fSNonUniformCleanBB + BW_f;
 lambda_tmp2 = single(dataset.c0)./fSNonUniformCleanRF;
@@ -146,7 +148,7 @@ imageRecover = abs(image3);
 
 %%%%%%%%%%%%!!!!!!!!!!!!!!!!!!!!
 
-if 0
+else
 s = dataset.data(:,:,probeIdx);
 omX = fxSNonUniformClean   * (2*pi/fsx);
 omF = fSNonUniformCleanBB  * (2*pi/BW_f);
